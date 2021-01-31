@@ -1,0 +1,7 @@
+*.json
+node_modules/
+out
+out.ztf
+*.key
+witness
+*.sol

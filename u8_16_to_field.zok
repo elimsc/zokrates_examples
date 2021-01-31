@@ -1,0 +1,6 @@
+import "EMBED/u8_to_bits" as u8_to_bits
+import "utils/pack/bool/pack128" as pack128
+
+def main(u8[16] a) -> field:
+    bool[128] bits =  [...u8_to_bits(a[0]), ...u8_to_bits(a[1]), ...u8_to_bits(a[2]), ...u8_to_bits(a[3]), ...u8_to_bits(a[4]), ...u8_to_bits(a[5]), ...u8_to_bits(a[6]), ...u8_to_bits(a[7]), ...u8_to_bits(a[8]), ...u8_to_bits(a[9]), ...u8_to_bits(a[10]), ...u8_to_bits(a[11]), ...u8_to_bits(a[12]), ...u8_to_bits(a[13]), ...u8_to_bits(a[14]), ...u8_to_bits(a[15])]
+    return pack128(bits)

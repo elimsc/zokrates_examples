@@ -1,0 +1,7 @@
+import "EMBED/u8_from_bits" as u8_from_bits
+import "utils/pack/bool/unpack128" as unpack128
+
+def main(field a) -> u8[16]:
+    bool[128] bits = unpack128(a)
+    return [u8_from_bits(bits[0..8]), u8_from_bits(bits[8..16]), u8_from_bits(bits[16..24]), u8_from_bits(bits[24..32]), u8_from_bits(bits[32..40]), u8_from_bits(bits[40..48]), u8_from_bits(bits[48..56]), u8_from_bits(bits[56..64]), u8_from_bits(bits[64..72]), u8_from_bits(bits[72..80]), u8_from_bits(bits[80..88]), u8_from_bits(bits[88..96]), u8_from_bits(bits[96..104]), u8_from_bits(bits[104..112]), u8_from_bits(bits[112..120]), u8_from_bits(bits[120..128])]
+
