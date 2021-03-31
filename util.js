@@ -69,11 +69,13 @@ function bigToStr(big) {
 }
 
 // test
-const big = 65392825175610104415632231972613810024n;
-var str = '12345678abcdefgh';
-const u8arr = new Uint8Array([49, 50, 51, 52, 53, 54, 55, 56, 97, 98, 99, 100, 101, 102, 103, 104]);
-console.assert(base16to10(base10to16(big)) == big);
-console.assert(bigToStr(big) == str);
-console.assert(strToBig(str) == big);
-console.assert(u8arrToBig(u8arr) == big);
+(function test() {
+  const big = 65392825175610104415632231972613810024n;
+  var str = '12345678abcdefgh';
+  const u8arr = new Uint8Array([49, 50, 51, 52, 53, 54, 55, 56, 97, 98, 99, 100, 101, 102, 103, 104]);
+  console.assert(base16to10(base10to16(big)) == big);
+  console.assert(bigToStr(big) == str);
+  console.assert(strToBig(str) == big);
+  console.assert(u8arrToBig(u8arr) == big);
+})();
 
