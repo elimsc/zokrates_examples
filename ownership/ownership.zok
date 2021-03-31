@@ -1,0 +1,14 @@
+import "hashes/sha256/512bit" as sha256
+import "utils/pack/u32/nonStrictUnpack256" as unpack256
+
+def field_to_u32_8(field a) -> u32[8]:
+    return unpack256(a)
+
+def main(private field dataHash1, field address1) -> u32[8]:
+    u32[8] dataHash = field_to_u32_8(dataHash1)
+    u32[8] address = field_to_u32_8(address1)
+    return sha256(dataHash, address)
+
+// constraints: 27452
+// demo input: 
+// 20329878786436204988385760252021328656300425018755239228739303522659023427620 1095133340139362678145976406600439923664792381054

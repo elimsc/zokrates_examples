@@ -1,3 +1,8 @@
 # zokrates_examples
 
-aes和hash联合完成整体逻辑
+hash(keykey) == hashedKeykey, Hash(key) == hashedKey, Enc(key, keykey) = encryptedKey  
+key: 128bit
+
+Hash(datahash, address) = hashOfHash  
+address: 160bit, datahash, 256bit
+
