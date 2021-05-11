@@ -12,3 +12,4 @@ witness
 **/witness
 **/*.sol
 **/*.json
+.DS_Store

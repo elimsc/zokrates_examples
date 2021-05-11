@@ -1,10 +1,10 @@
 // 16进制转10进制 num为16进制 字符串
-function base16to10(num) {
+function hexToBig(num) {
   return BigInt(num)
 }
 
 // 10进制转16进制, num为10进制 数
-function base10to16(num) {
+function bigToHex(num) {
   return '0x' + BigInt(num).toString(16)
 }
 
@@ -58,6 +58,16 @@ function u8arrToBig(buf) {
   return BigInt('0x' + hex.join(''));
 }
 
+function u32arrToHex(u32Arr) {
+  var hex = [];
+  u32 = Uint32Array.from(u32Arr)
+  u32.forEach(function (i) {
+    var h = i.toString(16);
+    hex.push('0'.repeat(8 - h.length) + h)
+  })
+  return '0x' + hex.join('');
+}
+
 // string => bigint
 function strToBig(str) {
   return u8arrToBig(strToU8arr(str));
@@ -73,9 +83,18 @@ function bigToStr(big) {
   const big = 65392825175610104415632231972613810024n;
   var str = '12345678abcdefgh';
   const u8arr = new Uint8Array([49, 50, 51, 52, 53, 54, 55, 56, 97, 98, 99, 100, 101, 102, 103, 104]);
-  console.assert(base16to10(base10to16(big)) == big);
+  console.assert(hexToBig(bigToHex(big)) == big);
   console.assert(bigToStr(big) == str);
   console.assert(strToBig(str) == big);
   console.assert(u8arrToBig(u8arr) == big);
+
+  const u32arr = new Uint32Array([50, 51, 52, 53, 54, 55, 56, 57]);
+  console.log(u32arrToHex(u32arr) == '0x0000003200000033000000340000003500000036000000370000003800000039')
+  console.log(hexToBig('' + u32arrToHex(u32arr)))
+
+  // 0x0000003200000033000000340000003500000036000000370000003800000039
+  // 1347997333677664178314069558465848711463127878989839168093184396886073
+  console.log(hexToBig('0x0000003200000033000000340000003500000036000000370000003800000039'));
+  // 36341936214780344529475692710416345157619370405341114642424254771276096654052387990787801629949271340173321900549085200726559466178215993
 })();
 
