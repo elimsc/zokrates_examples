@@ -232,7 +232,8 @@ def encrypt_cbc(plaintext, master_key, iv):
     print("master key: ", [v for v in master_key])
 
     assert len(iv) == 16
-    return encrypt_block(xor16(plaintext, iv), _key_matrices, n_rounds)
+    return encrypt_block(plaintext, _key_matrices, n_rounds)
+    # return encrypt_block(xor16(plaintext, iv), _key_matrices, n_rounds)
 
     blocks = []
     previous = iv
@@ -252,4 +253,4 @@ if __name__ == "__main__":
     iv = b'12345678abcdefgh'
     encrypted = encrypt_cbc(b'12345678abcdefgh', key, iv)
     print("cipher: ", [v for v in encrypted])
-    print(encrypted)
+    # print(encrypted)

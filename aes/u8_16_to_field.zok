@@ -1,4 +1,4 @@
-import "EMBED/u8_to_bits" as u8_to_bits
+import "utils/casts/u8_to_bits" as u8_to_bits
 import "utils/pack/bool/pack128" as pack128
 
 def main(u8[16] a) -> field:

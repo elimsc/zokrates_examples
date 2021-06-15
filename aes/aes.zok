@@ -1,6 +1,6 @@
-import "utils/casts/u8_to_field" as u8_to_field
-import "EMBED/u8_from_bits" as u8_from_bits
-import "utils/pack/bool/unpack128" as unpack128
+import "./field_to_u8_16" as field_to_u8_16
+import "./u8_16_to_field" as u8_16_to_field
+import "./u8_to_u32" as u8_to_u32
 
 def sub_bytes(u8[4][4] s) -> u8[4][4]:
     u8[256] s_box = [
@@ -22,9 +22,9 @@ def sub_bytes(u8[4][4] s) -> u8[4][4]:
         0x8C, 0xA1, 0x89, 0x0D, 0xBF, 0xE6, 0x42, 0x68, 0x41, 0x99, 0x2D, 0x0F, 0xB0, 0x54, 0xBB, 0x16
     ]
 
-    for field i in 0..4 do
-        for field j in 0..4 do
-            s[i][j] = s_box[u8_to_field(s[i][j])]
+    for u32 i in 0..4 do
+        for u32 j in 0..4 do
+            s[i][j] = s_box[u8_to_u32(s[i][j])]
         endfor
     endfor
     return s
@@ -52,8 +52,8 @@ def shift_rows(u8[4][4] s) -> u8[4][4]:
 
 
 def add_round_key(u8[4][4] s, u8[4][4] k) -> u8[4][4]:
-    for field i in 0..4 do
-        for field j in 0..4 do
+    for u32 i in 0..4 do
+        for u32 j in 0..4 do
             s[i][j] = s[i][j] ^ k[i][j]
         endfor
     endfor
@@ -66,7 +66,7 @@ def xtime(u8 a) -> u8:
 
 
 def mix_columns(u8[4][4] s) -> u8[4][4]:
-    for field i in 0..4 do
+    for u32 i in 0..4 do
         u8[4] a = s[i]
 
         // mix_single_column
@@ -82,9 +82,9 @@ def mix_columns(u8[4][4] s) -> u8[4][4]:
     return s
 
 def bytes2matrix(u8[16] text) -> u8[4][4]:
-    u8[4][4] m = [[0x00;4], [0x00;4], [0x00;4], [0x00;4]]
-    for field i in 0..4 do
-        for field j in 0..4 do
+    u8[4][4] m = [[0x00;4];4]
+    for u32 i in 0..4 do
+        for u32 j in 0..4 do
             m[i][j] = text[i*4+j] 
         endfor
     endfor
@@ -93,8 +93,8 @@ def bytes2matrix(u8[16] text) -> u8[4][4]:
 
 def matrix2bytes(u8[4][4] matrix) -> u8[16]:
     u8[16] text = [0x00;16]
-    for field i in 0..4 do
-        for field j in 0..4 do
+    for u32 i in 0..4 do
+        for u32 j in 0..4 do
             text[i*4+j] = matrix[i][j]
         endfor
     endfor
@@ -103,7 +103,7 @@ def matrix2bytes(u8[4][4] matrix) -> u8[16]:
 
 def xor4(u8[4] a, u8[4] b) -> u8[4]:
     u8[4] v = [0x00;4]
-    for field i in 0..4 do
+    for u32 i in 0..4 do
         v[i] = a[i] ^ b[i]
     endfor
     return v
@@ -111,7 +111,7 @@ def xor4(u8[4] a, u8[4] b) -> u8[4]:
 
 def xor16(u8[16] a, u8[16] b) -> u8[16]:
     u8[16] v = [0x00;16]
-    for field i in 0..16 do
+    for u32 i in 0..16 do
         v[i] = a[i] ^ b[i]
     endfor
     return v
@@ -119,16 +119,16 @@ def xor16(u8[16] a, u8[16] b) -> u8[16]:
 
 def split_blocks(u8[32] message) -> u8[2][16]:
     // field block_size = 16
-    u8[2][16] l = [[0x00;16],[0x00;16]]
-    for field i in 0..2 do
-        for field j in 0..16 do
+    u8[2][16] l = [[0x00;16];2]
+    for u32 i in 0..2 do
+        for u32 j in 0..16 do
             l[i][j] = message[i*16+j]
         endfor
     endfor
     return l
 
 
-def helper_in_expand_key(u8[4] word, field i) -> u8[4]:
+def helper_in_expand_key(u8[4] word, u32 i) -> u8[4]:
     u8[32] r_con = [
         0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40,
         0x80, 0x1B, 0x36, 0x6C, 0xD8, 0xAB, 0x4D, 0x9A,
@@ -160,21 +160,21 @@ def helper_in_expand_key(u8[4] word, field i) -> u8[4]:
     word[2] = word[3]
     word[3] = temp
     // Map to S-BOX.
-    for field j in 0..4 do
-        word[j] = s_box[u8_to_field(word[j])]
+    for u32 j in 0..4 do
+        word[j] = s_box[u8_to_u32(word[j])]
     endfor
     // XOR with first byte of R-CON, since the others bytes of R-CON are 0.
     word[0] = word[0] ^ r_con[i]
     return word
 
 def expand_key(u8[16] master_key) -> u8[11][4][4]:
-    field n_rounds = 10
+    u32 n_rounds = 10
     
     u8[4][4] key_columns = bytes2matrix(master_key)
-    field iteration_size = 4
+    u32 iteration_size = 4
 
     // Each iteration has exactly as many columns as the key material.
-    field i = 1
+    u32 i = 1
     // field len_key_columns = 4
     u8[44][4] var_key_colums = [[0x00;4];44]
     var_key_colums[0] = key_columns[0]
@@ -182,7 +182,7 @@ def expand_key(u8[16] master_key) -> u8[11][4][4]:
     var_key_colums[2] = key_columns[2]
     var_key_colums[3] = key_columns[3]
 
-    for field len_key_columns in 4..(n_rounds+1)*4 do
+    for u32 len_key_columns in 4..(n_rounds+1)*4 do
         // Copy previous word.
         u8[4] word = var_key_colums[len_key_columns-1]
 
@@ -196,8 +196,8 @@ def expand_key(u8[16] master_key) -> u8[11][4][4]:
     endfor
 
     u8[11][4][4] m = [[[0x00;4];4];11]
-    for field j in 0..11 do
-        for field k in 0..4 do
+    for u32 j in 0..11 do
+        for u32 k in 0..4 do
             m[j][k] = var_key_colums[j*4+k]
         endfor
     endfor
@@ -207,11 +207,11 @@ def expand_key(u8[16] master_key) -> u8[11][4][4]:
 def encrypt_block(u8[16] plaintext, u8[11][4][4] key_matrices) -> u8[16]:
 
     u8[4][4] plain_state = bytes2matrix(plaintext)
-    field n_rounds = 10 // AES-128
+    u32 n_rounds = 10 // AES-128
 
     plain_state = add_round_key(plain_state, key_matrices[0]) 
 
-    for field i in 1..n_rounds do
+    for u32 i in 1..n_rounds do
         plain_state = sub_bytes(plain_state)
         plain_state = shift_rows(plain_state)
         plain_state = mix_columns(plain_state)
@@ -224,27 +224,16 @@ def encrypt_block(u8[16] plaintext, u8[11][4][4] key_matrices) -> u8[16]:
 
     return matrix2bytes(plain_state)
 
-def field_to_u8_16(field a) -> u8[16]:
-    bool[128] bits = unpack128(a)
-    return [u8_from_bits(bits[0..8]), u8_from_bits(bits[8..16]), u8_from_bits(bits[16..24]), u8_from_bits(bits[24..32]), u8_from_bits(bits[32..40]), u8_from_bits(bits[40..48]), u8_from_bits(bits[48..56]), u8_from_bits(bits[56..64]), u8_from_bits(bits[64..72]), u8_from_bits(bits[72..80]), u8_from_bits(bits[80..88]), u8_from_bits(bits[88..96]), u8_from_bits(bits[96..104]), u8_from_bits(bits[104..112]), u8_from_bits(bits[112..120]), u8_from_bits(bits[120..128])]
 
-
-def main(private field plaintext1, private field master_key1, field iv1, field provided_cipher1) -> bool:
+def main(field plaintext1, field master_key1) -> field:
     // field to u8[16]
     u8[16] plaintext = field_to_u8_16(plaintext1)
     u8[16] master_key = field_to_u8_16(master_key1)
-    u8[16] iv = field_to_u8_16(iv1)
-    u8[16] provided_cipher = field_to_u8_16(provided_cipher1)
 
     u8[11][4][4] key_matrices = expand_key(master_key) // key expand
-    u8[16] cipher = encrypt_block(xor16(plaintext, iv), key_matrices)
-    bool r = true
-    for field i in 0..16 do
-        r = r && (cipher[i] == provided_cipher[i])
-    endfor
-    return r 
+    u8[16] cipher = encrypt_block(plaintext, key_matrices)
+    return u8_16_to_field(cipher)
 
 
-// 173928 -- without key expand
-// 339906 -- with key expand
+// Number of constraints: 215051
 

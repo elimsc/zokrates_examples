@@ -1,0 +1,8 @@
+import "utils/casts/u8_to_bits" as u8_to_bits
+import "utils/casts/u32_from_bits" as u32_from_bits
+
+def main(u8 a) -> u32:
+    bool[32] bits = [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false, 
+        ...u8_to_bits(a)]
+    return u32_from_bits(bits)
+
