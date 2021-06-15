@@ -1,0 +1,20 @@
+import "utils/casts/u64_from_bits" as u64_from_bits
+import "hashes/keccak/256bit" as kecc256
+import "utils/casts/u64_to_bits" as u64_to_bits
+import "utils/pack/bool/pack128" as pack128
+import "utils/pack/bool/unpack128" as unpack128
+
+def field_to_u64_2(field a) -> u64[2]:
+    bool[128] bits = unpack128(a)
+    return [u64_from_bits(bits[0..64]), u64_from_bits(bits[64..128])]
+
+def u64_2_to_field(u64[2] a) -> field:
+    bool[128] bits = [...u64_to_bits(a[0]), ...u64_to_bits(a[1])]
+    return pack128(bits)
+
+def main(field p) -> field[2]:
+    u64[4] hr = kecc256(field_to_u64_2(p))
+    return [u64_2_to_field(hr[0..2]), u64_2_to_field(hr[2..4])]
+
+
+

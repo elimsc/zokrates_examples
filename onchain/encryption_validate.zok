@@ -1,0 +1,18 @@
+import "../aes/aes.zok" as enc
+import "../hash/sha256" as hash
+
+def main(private field plain, private field key, field cipher, field[2] pHash, field[2] kHash) -> bool:
+    bool ok1 = false
+    bool ok2 = false
+    bool ok3 = false
+
+    field[2] realpHash = hash(plain)
+    field[2] realkHash = hash(key)
+
+    ok1 = if realpHash[0] == pHash[0] && realpHash[1] == pHash[1] then true else false fi
+    ok2 = if realkHash[0] == kHash[0] && realkHash[1] == kHash[1] then true else false fi
+    ok3 = enc(plain, key) == cipher
+
+    return ok1 && ok2 && ok3
+
+// Number of constraints: 268223

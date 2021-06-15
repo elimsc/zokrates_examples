@@ -1,0 +1,10 @@
+import "hashes/sha256/256bitPadded" as sha256
+import "utils/pack/u32/nonStrictUnpack256" as field_to_u32_8
+import "utils/pack/u32/pack128" as u32_4_to_field 
+
+def main(field input) -> field[2]:
+    u32[8] inp = field_to_u32_8(input)
+    u32[8] out = sha256(inp)
+    return [u32_4_to_field(out[0..4]), u32_4_to_field(out[4..8])]
+
+// constraints: 26581
