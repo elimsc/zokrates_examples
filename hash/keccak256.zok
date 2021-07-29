@@ -16,5 +16,7 @@ def main(field p) -> field[2]:
     u64[4] hr = kecc256(field_to_u64_2(p))
     return [u64_2_to_field(hr[0..2]), u64_2_to_field(hr[2..4])]
 
+// constraints: 150512
+
 
 

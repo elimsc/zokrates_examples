@@ -1,0 +1,2 @@
+def main(private field x) -> field:
+	return x * x * x + x + 5
