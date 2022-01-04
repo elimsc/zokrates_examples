@@ -1,4 +1,3 @@
-*.json
 node_modules/
 out
 out.ztf
@@ -11,5 +10,6 @@ witness
 **/*.key
 **/witness
 **/*.sol
-**/*.json
+**/proof.json
+**/abi.json
 .DS_Store
