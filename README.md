@@ -10,9 +10,6 @@ ZoKrates 0.7.3
 hash(keykey) == hashedKeykey
 Hash(key) == hashedKey
 Enc(key, keykey) = encryptedKey  
-
-// ownership
-// address: 160bit, datahash, 256bit
 ```
 
 zokrates: https://zokrates.github.io/gettingstarted.html

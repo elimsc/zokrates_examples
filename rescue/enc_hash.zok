@@ -1,0 +1,15 @@
+import "./cipher"
+import "./hash"
+
+def main(private field[15][4] enc_key_mid, private field[15][4] enc_data_mid, private field[15][4] zero_mid, private field[15][4] hash_key_mid, private field[15][4] hash_data_mid, field[4] ed, field[2] kh, field[2] dh) -> bool:
+	bool res = true
+	res = res && cipher(enc_key_mid, enc_data_mid)
+	res = res && hash(zero_mid, hash_key_mid, kh)
+	res = res && hash(zero_mid, hash_data_mid, dh)
+
+	for u32 i in 0..4 do
+		bool is_equal = if enc_data_mid[14][i] == ed[i] then true else false fi
+		res = res && is_equal
+	endfor
+
+	return res

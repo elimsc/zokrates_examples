@@ -1,0 +1,16 @@
+import "./cipher"
+
+// check Hash(data[0][0..2]) == h
+// TODO: hard encode value of key
+def main(field[15][4] key, field[15][4] data, field[2] h) -> bool:
+    bool res = true
+    bool res1 = cipher(key, data)
+    res = res && res1
+
+    bool res2 = if data[14][0] == h[0] then true else false fi
+    res = res && res2
+
+    bool res3 = if data[14][1] == h[1] then true else false fi
+    res = res && res3
+
+    return res
