@@ -13,3 +13,4 @@ witness
 **/proof.json
 **/abi.json
 .DS_Store
+**/circuit

@@ -1,6 +1,6 @@
 # zokrates_examples
 
-ZoKrates 0.7.3
+ZoKrates 0.7.10
 
 ```
 // Hash : sha3
