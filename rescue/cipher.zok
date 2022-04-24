@@ -2,7 +2,7 @@ const u32 STATE_WIDTH = 4
 const u32 NUM_ROUNDS = 14
 const u32 CYCLE_LENGTH = 16
 
-const u32 ALPHA = 5
+const u32 ALPHA = 3
 
 const field[16] MDS = [
     340282366920938463463374557953744960808,
